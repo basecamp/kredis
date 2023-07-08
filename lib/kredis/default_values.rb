@@ -20,6 +20,6 @@ module Kredis::DefaultValues
 
   def initialize(...)
     super
-    set_default if default.present?
+    set_default if default.present? && !exists?
   end
 end

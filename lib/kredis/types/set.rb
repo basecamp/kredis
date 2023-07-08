@@ -1,4 +1,6 @@
 class Kredis::Types::Set < Kredis::Types::Proxying
+  prepend Kredis::DefaultValues
+
   proxying :smembers, :sadd, :srem, :multi, :del, :sismember, :scard, :spop, :exists?, :srandmember
   callback_after_change_for :add, :<<, :remove, :replace, :take, :clear
 
@@ -50,4 +52,9 @@ class Kredis::Types::Set < Kredis::Types::Proxying
       strings_to_types(srandmember(count))
     end
   end
+
+  private
+    def set_default
+      add default
+    end
 end
