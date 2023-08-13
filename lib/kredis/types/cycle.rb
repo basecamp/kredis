@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Kredis::Types::Cycle < Kredis::Types::Counter
   callback_after_change_for :next, :reset
 
