@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
 module Kredis::DefaultValues
   extend ActiveSupport::Concern
 
   prepended do
-    attr_writer :default, :default_context
+    attr_writer :default
+
+    # proxying :watch, :unwatch, :exists?
 
     def default
       case @default
@@ -20,6 +24,13 @@ module Kredis::DefaultValues
 
   def initialize(...)
     super
-    set_default if default.present? && !exists?
+
+    if default
+      proxy.watch do
+        set_default unless proxy.exists?
+
+        proxy.unwatch
+      end
+    end
   end
 end
